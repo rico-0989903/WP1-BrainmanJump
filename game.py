@@ -9,8 +9,8 @@ SCREEN_HEIGT = 800
 clock = pygame.time.Clock()
 
 # Player variables
-SPEED = 10
-STARTING_POSITION = 120
+SPEED = 1
+STARTING_POSITION = [SCREEN_WIDTH//2 - 50, 50]
 
 # screen setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
@@ -25,11 +25,15 @@ class Player(object):
 
     def MoveRight(self):
         #TODO move position to right
-        self.postion += SPEED
+        self.postion[0] += SPEED
 
     def MoveLeft(self):
         #TODO move position to left
-        self.position -= SPEED
+        self.position[0] -= SPEED
+
+    def JumpUp(self):
+        #TODO Jump mechanic
+        self.position[1]
 
 # game loop
 run = True
