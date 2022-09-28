@@ -7,9 +7,13 @@ FPS = 60
 SCREEN_WIDTH = 500
 SCREEN_HEIGT = 800
 clock = pygame.time.Clock()
+
 # screen setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
 pygame.display.set_caption('BrainJump')
+
+# classes
+
 
 # game loop
 run = True
