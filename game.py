@@ -13,7 +13,11 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
 pygame.display.set_caption('BrainJump')
 
 # classes
+class Player():
 
+    def __init__(self):
+        #TODO set position
+        self.position = 0
 
 # game loop
 run = True
