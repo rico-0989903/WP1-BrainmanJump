@@ -11,7 +11,9 @@ clock = pygame.time.Clock()
 MAX_PLATFORMS = 10
 
 # Player variables
-SPEED = 5
+SPEED = 12
+GRAVITY = 0.25
+JUMP_STRENGTH = 2.5
 
 # screen setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
@@ -33,6 +35,8 @@ class Player():
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.flip = False
+        self.vel_y = 0
+        self.dy = 0
 
     def draw(self):
         screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
@@ -44,12 +48,14 @@ class Player():
         self.rect.x -= SPEED
 
     def JumpUp(self):
-        #TODO Jump mechanic
-        self.position[1]
+        self.dy = 0
+        self.vel_y = -JUMP_STRENGTH
+
 
     def MoveCheck(self):
         #Left and Right controls
         key = pygame.key.get_pressed()
+
         if key[pygame.K_a]:
             self.flip = False
             self.MoveLeft()
@@ -57,11 +63,17 @@ class Player():
             self.flip = True
             self.MoveRight()
 
+        self.vel_y += GRAVITY
+        self.dy += self.vel_y
+        self.rect.y += self.dy
+
         #Corrects border collision
         if self.rect.left - SPEED < 0:
             self.MoveRight()
         if self.rect.right + SPEED > SCREEN_WIDTH:
             self.MoveLeft()
+        if self.rect.bottom + self.dy > SCREEN_HEIGT:
+            self.JumpUp()
 
 class Platform(pygame.sprite.Sprite):
     def __init__(self, x, y, width):
