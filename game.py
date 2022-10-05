@@ -75,10 +75,10 @@ class Player():
         self.rect.y += self.dy
 
         #Corrects border collision
-        if self.rect.left - SPEED < 0:
-            self.MoveRight()
-        if self.rect.right + SPEED > SCREEN_WIDTH:
-            self.MoveLeft()
+        if self.rect.x < 0:
+            self.rect.x = SCREEN_WIDTH
+        if self.rect.x > SCREEN_WIDTH:
+            self.rect.x = 0
         if self.rect.bottom + self.dy > SCREEN_HEIGT:
             self.JumpUp()
         
