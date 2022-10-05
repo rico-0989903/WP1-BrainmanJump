@@ -1,3 +1,4 @@
+from cmath import rect
 import pygame
 import random
 
@@ -44,16 +45,20 @@ class Player():
         self.flip = False
         self.vel_y = 0
         self.dy = 0
-
+    
+    # prints character on screen
     def draw(self):
         screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
 
+    # movement right
     def MoveRight(self):
         self.rect.x += SPEED
 
+    # movent left
     def MoveLeft(self):
         self.rect.x -= SPEED
 
+    # Jumping
     def JumpUp(self):
         self.dy = 0
         self.vel_y = -JUMP_STRENGTH
@@ -74,18 +79,27 @@ class Player():
         self.dy += self.vel_y
         self.rect.y += self.dy
 
-        #Corrects border collision
+        # side switch
         if self.rect.x < 0:
             self.rect.x = SCREEN_WIDTH
         if self.rect.x > SCREEN_WIDTH:
             self.rect.x = 0
+        
+        # temp bottom screen collision
         if self.rect.bottom + self.dy > SCREEN_HEIGT:
             self.JumpUp()
         
+        # platform collision
         for platform in platform_group:
+            # checks if player is colliding with the platforms
             if platform.rect.colliderect(self.rect.x, self.rect.y + self.dy, 35, 35):
+                # checks if player is above the platform
                 if self.rect.bottom < platform.rect.centery:
-                    if self.vel_y > 0:
+                    # checks if player is falling down
+                    if self.dy > 0:
+                        # puts player flat on the platform for clean looks
+                        self.rect.bottom = platform.rect.top
+                        self.dy = 0
                         self.JumpUp()
 
 
@@ -109,7 +123,7 @@ for p in range(MAX_PLATFORMS):
 
 # game loop
 run = True
-brainman = Player(SCREEN_WIDTH // 2, SCREEN_HEIGT - 150)
+brainman = Player(SCREEN_WIDTH // 2, SCREEN_HEIGT - 50)
 while run:
 
     #set framerate
@@ -123,8 +137,6 @@ while run:
     platform_group.draw(screen)
 
     brainman.draw()
-
-    
 
     #movement set
     brainman.MoveCheck()
