@@ -63,8 +63,6 @@ class Player():
         if self.rect.right + SPEED > SCREEN_WIDTH:
             self.MoveLeft()
 
-
-# classes
 class Platform(pygame.sprite.Sprite):
     def __init__(self, x, y, width):
         pygame.sprite.Sprite.__init__(self)
@@ -76,6 +74,10 @@ class Platform(pygame.sprite.Sprite):
 # platform group
 platform_group = pygame.sprite.Group()
 
+# start platform
+start_platform = Platform(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGT - 20, 100)
+platform_group.add(start_platform)
+
 # temp platforms
 for p in range(MAX_PLATFORMS):
     p_w = random.randint(70, 80)
@@ -83,6 +85,7 @@ for p in range(MAX_PLATFORMS):
     p_y = p * 100
     platform = Platform(p_x, p_y, p_w)
     platform_group.add(platform)
+
 
 # game loop
 run = True
@@ -96,13 +99,15 @@ while run:
     screen.fill((WHITE))
 
     # drawing
+
     platform_group.draw(screen)
+
+    brainman.draw()
+
+    
 
     #movement set
     brainman.MoveCheck()
-
-    #Player
-    brainman.draw()
 
     # events
     for event in pygame.event.get():
