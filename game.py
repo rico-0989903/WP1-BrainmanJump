@@ -10,8 +10,6 @@ SCREEN_HEIGT = 800
 clock = pygame.time.Clock()
 MAX_PLATFORMS = 10
 
-
-
 # screen setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
 pygame.display.set_caption('BrainJump')
