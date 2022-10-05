@@ -28,8 +28,15 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 # classes
-class Player():
+class Platform(pygame.sprite.Sprite):
+    def __init__(self, x, y, width):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(platform_image, (width, 10))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
+class Player():
     def __init__(self, x, y):
         self.image = pygame.transform.scale(brainman_sprite, (35, 35))
         self.rect = self.image.get_rect()
@@ -74,14 +81,15 @@ class Player():
             self.MoveLeft()
         if self.rect.bottom + self.dy > SCREEN_HEIGT:
             self.JumpUp()
+        
+        for platform in platform_group:
+            if platform.rect.colliderect(self.rect.x, self.rect.y + self.dy, 35, 35):
+                if self.rect.bottom < platform.rect.centery:
+                    if self.vel_y > 0:
+                        self.JumpUp()
 
-class Platform(pygame.sprite.Sprite):
-    def __init__(self, x, y, width):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(platform_image, (width, 10))
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+
+
 
 # platform group
 platform_group = pygame.sprite.Group()
