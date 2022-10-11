@@ -13,18 +13,24 @@ MAX_PLATFORMS = 10
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
 pygame.display.set_caption('BrainJump')
 
-
+# Images in map
 start_img = pygame.image.load('image/start.png').convert_alpha()
 exit_img = pygame.image.load('image/exit.png').convert_alpha()
 credits_img = pygame.image.load('image/credits.png').convert_alpha()
 
-
+#button class
 class Button():
-    def _init_(self,x,y, image):
+    def _init_(self,x,y, image, scale):
+        #images Height and width info
+        width = image.get_width()
+        height = image.get_width()
+        # Image size
+        #self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale))
+       # Images rectangle 
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.topleft = (x,y)
-
+# Buttoon on screen
     def draw(self):
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
@@ -41,7 +47,7 @@ while run:
     start_button.draw()
     exit_button.draw()
 
-    
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
