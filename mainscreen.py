@@ -19,6 +19,20 @@ exit_img = pygame.image.load('image/exit.png').convert_alpha()
 credits_img = pygame.image.load('image/credits.png').convert_alpha()
 
 
+class Button():
+    def _init_(self,x,y, image):
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x,y)
+
+    def draw(self):
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+
+start_button = Button(100, 200, start_image)
+exit_button = Button(450, 200, exit_img)
+
+
+
 run = True 
 while run:
     for event in pygame.event.get():
