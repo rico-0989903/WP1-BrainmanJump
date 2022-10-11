@@ -35,7 +35,7 @@ class Button():
         self.clicked = False
 # Buttoon on screen
     def draw(self):
-
+        action = False
         #cursor position on screen
         pos = pygame.mouse.get_pos()
 
@@ -46,6 +46,7 @@ class Button():
         if self.rect.collidepoint(pos):
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 self.clicked = True
+                action = True
         
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
@@ -53,6 +54,8 @@ class Button():
 
         #draw buttons on screen
         screen.blit(self.image, (self.rect.x, self.rect.y))
+
+        return action
 
 start_button = Button(100, 200, start_image, #OG * size)
 exit_button = Button(450, 200, exit_img, #OG * size)
@@ -64,8 +67,10 @@ while run:
 
     screen.fill((0,0,0))
 
-    start_button.draw()
-    exit_button.draw()
+    if start_button.draw() == True:
+
+    if exit_button.draw() == True:
+        run = False
 
 
     for event in pygame.event.get():
