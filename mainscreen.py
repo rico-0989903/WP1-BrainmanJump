@@ -35,6 +35,13 @@ exit_button = Button(450, 200, exit_img)
 
 run = True 
 while run:
+
+    screen.fill((0,0,0))
+
+    start_button.draw()
+    exit_button.draw()
+
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
