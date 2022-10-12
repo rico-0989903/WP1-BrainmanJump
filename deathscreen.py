@@ -3,7 +3,7 @@ import os
 from os import system
 
 pygame.init()
-
+pygame.font.init()
 # variables
 FPS = 60
 SCREEN_WIDTH = 500
@@ -64,17 +64,19 @@ class Button():
 
         return action
 
-start_button = Button(SCREEN_WIDTH// 2 - 100, 100, start_img, (200, 100))
+start_button = Button(SCREEN_WIDTH// 2 - 100, 300, start_img, (200, 100))
 exit_button = Button(SCREEN_WIDTH// 2 - 100, 450, exit_img, (200, 100))
 
+font = pygame.font.SysFont('Comic Sans', 80)
 
+text = font.render('Game Over', False, (255, 255, 255))
 
 run = True 
 system('taskkill /F /FI "WINDOWTITLE eq BrainJump" ')
 while run:
 
     screen.fill((0,0,0))
-
+    screen.blit(text, (40, 10))
     start_button.draw()
     exit_button.draw()
 

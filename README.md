@@ -1,1 +1,1 @@
-# Clean repository and game.py
+Open 'mainscreen.py'

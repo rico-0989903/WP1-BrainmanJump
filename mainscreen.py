@@ -3,6 +3,7 @@ import os
 from os import system
 
 pygame.init()
+pygame.font.init()
 
 # variables
 FPS = 60
@@ -26,16 +27,9 @@ class Button():
         #images Height and width info
         #self.image = image
         self.scale = (200, 100)
-        self.image = pygame.transform.scale(image, self.scale)
-        
+        self.image = pygame.transform.scale(image, self.scale)      
         width = self.image.get_width()
-        height = self.image.get_width()
-        
-        # Image size
-        #s
-
-       # Images rectangle 
-        
+        height = self.image.get_width()     
         self.rect = self.image.get_rect()
         self.rect.topleft = (x,y)
         self.clicked = False
@@ -44,10 +38,6 @@ class Button():
         action = False
         #cursor position on screen
         pos = pygame.mouse.get_pos()
-
-        #Cursor coordinates
-        #print(pos)
-
         #Mouse click Leftbutton:[0]
         mouse_buttons = pygame.mouse.get_pressed()
 
@@ -56,17 +46,18 @@ class Button():
                 print("clicked")
                 self.clicked = True
                 action = True
-        
-
-
         #draw buttons on screen
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
         return action
 
-start_button = Button(SCREEN_WIDTH// 2 - 100, 100, start_img, (200, 100))
+# buttons
+start_button = Button(SCREEN_WIDTH// 2 - 100, 300, start_img, (200, 100))
 exit_button = Button(SCREEN_WIDTH// 2 - 100, 450, exit_img, (200, 100))
 
+# main screen text
+font = pygame.font.SysFont('Comic Sans', 80)
+text = font.render('Main Menu', False, (255, 255, 255))
 
 
 run = True 
@@ -74,23 +65,16 @@ system('taskkill /F /FI "WINDOWTITLE eq BrainJump" ')
 while run:
 
     screen.fill((0,0,0))
-
+    screen.blit(text, (50, 10))
     start_button.draw()
     exit_button.draw()
 
-
-    
-
-
     for event in pygame.event.get():
-        
         if event.type == pygame.QUIT:
             run = False
-
         if start_button.draw() == True:
             os.system('python game.py')
             run = False
-
         if exit_button.draw() == True:
             run = False
 
