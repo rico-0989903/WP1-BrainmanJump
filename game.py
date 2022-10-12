@@ -15,9 +15,10 @@ MAX_PLATFORMS = 10
 
 # Game variables
 SPEED = 12
-SCROLL = 200
+PLATFORM_SPACING = 120
+SCROLL = SCREEN_HEIGT - PLATFORM_SPACING
 GRAVITY = 0.25
-JUMP_STRENGTH = 2.5
+JUMP_STRENGTH = 2.4
 scrolled_dist = 0
 background_scroll = 0
 
@@ -53,6 +54,9 @@ class Platform(pygame.sprite.Sprite):
     def update(self, scroll):
         #Update platform positions when threshold is reached
         self.rect.y += scroll
+
+        if self.rect.top > SCREEN_HEIGT - 10:
+            self.kill()
 
 
 class Player():
@@ -93,10 +97,6 @@ class Player():
             self.flip = True
             self.MoveRight()
 
-        self.vel_y += GRAVITY
-        self.dy += self.vel_y
-        self.rect.y += self.dy + scroll
-
         # side switch
         if self.rect.x < 0:
             self.rect.x = SCREEN_WIDTH
@@ -124,6 +124,10 @@ class Player():
             if self.vel_y < 0:
                 scroll = -self.dy
 
+        self.vel_y += GRAVITY
+        self.dy += self.vel_y
+        self.rect.y += self.dy + scroll
+
         return scroll
 
 
@@ -131,16 +135,8 @@ class Player():
 platform_group = pygame.sprite.Group()
 
 # start platform
-start_platform = Platform(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGT - 20, 100)
-platform_group.add(start_platform)
-
-# temp platforms
-for p in range(MAX_PLATFORMS):
-    p_w = random.randint(70, 80)
-    p_x = random.randint(0, SCREEN_WIDTH - p_w)
-    p_y = p * 100
-    platform = Platform(p_x, p_y, p_w)
-    platform_group.add(platform)
+platform = Platform(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGT - 30, 100)
+platform_group.add(platform)
 
 
 # game loop
@@ -159,13 +155,20 @@ while run:
         background_scroll = 0
     scrollingbackground(background_scroll)
 
-
-    platform_group.draw(screen)
-
-    brainman.draw()
+    #Platform generating
+    if len(platform_group) < MAX_PLATFORMS:
+        p_w = random.randint(70, 80)
+        p_x = random.randint(0, SCREEN_WIDTH - p_w)
+        p_y = platform.rect.y - PLATFORM_SPACING
+        platform = Platform(p_x, p_y, p_w)
+        platform_group.add(platform)
+    
 
     #movement set
     platform_group.update(scroll)
+
+    platform_group.draw(screen)
+    brainman.draw()
 
     # events
     for event in pygame.event.get():
