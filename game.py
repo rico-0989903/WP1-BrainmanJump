@@ -11,10 +11,12 @@ SCREEN_HEIGT = 800
 clock = pygame.time.Clock()
 MAX_PLATFORMS = 10
 
-# Player variables
+# Game variables
 SPEED = 12
+SCROLL = 200
 GRAVITY = 0.25
 JUMP_STRENGTH = 2.5
+scrolled_dist = 0
 
 # screen setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
@@ -37,6 +39,11 @@ class Platform(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+    def update(self, scroll):
+        #Update platform positions when threshold is reached
+        self.rect.y += scroll
+
 
 class Player():
     def __init__(self, x, y):
@@ -68,6 +75,7 @@ class Player():
     def MoveCheck(self):
         #Left and Right controls
         key = pygame.key.get_pressed()
+        scroll = 0
 
         if key[pygame.K_a]:
             self.flip = False
@@ -103,7 +111,11 @@ class Player():
                         self.dy = 0
                         self.JumpUp()
 
+        if self.rect.top <= SCROLL:
+            if self.vel_y < 0:
+                scroll = -self.dy
 
+        return scroll
 
 
 # platform group
@@ -135,12 +147,14 @@ while run:
     # drawing
     screen.blit(background_image, (0, 0))
 
+
     platform_group.draw(screen)
 
     brainman.draw()
 
     #movement set
-    brainman.MoveCheck()
+    scroll = brainman.MoveCheck()
+    platform_group.update(scroll)
 
     # events
     for event in pygame.event.get():
