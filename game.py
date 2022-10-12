@@ -1,7 +1,8 @@
 from cmath import rect
-from tkinter import scrolledtext
 import pygame
 import random
+import os
+from os import system
 
 pygame.init()
 
@@ -12,10 +13,13 @@ SCREEN_HEIGT = 800
 clock = pygame.time.Clock()
 MAX_PLATFORMS = 10
 
-# Player variables
+# Game variables
 SPEED = 12
+SCROLL = 200
 GRAVITY = 0.25
 JUMP_STRENGTH = 2.5
+scrolled_dist = 0
+background_scroll = 0
 
 # screen setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
@@ -30,26 +34,25 @@ brainman_sprite = pygame.image.load('Assets/BrainMan.png').convert_alpha()
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
+#Game functions
+def scrollingbackground(background_scroll):
+    screen.blit(background_image, (0, 0 + background_scroll))
+    screen.blit(background_image, (0, -background_image.get_height() + background_scroll))
+
+
+
 # classes
 class Platform(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, moving):
+    def __init__(self, x, y, width):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.transform.scale(platform_image, (width, 10))
         self.rect = self.image.get_rect()
-        self.moving = moving 
-        self.move_counter = random.randint(70, 80)
-        self.direction = random.choice([-2, 2])
         self.rect.x = x
         self.rect.y = y
 
-def update(self,scroll):
-    if self.moving == True:
-        self.rect.x += self.direction 
-        
-    self.rect.y += scroll
-
-    if self.rect.top > SCREEN_HEIGT:
-        self.kill()
+    def update(self, scroll):
+        #Update platform positions when threshold is reached
+        self.rect.y += scroll
 
 
 class Player():
@@ -78,10 +81,10 @@ class Player():
         self.dy = 0
         self.vel_y = -JUMP_STRENGTH
 
-
     def MoveCheck(self):
         #Left and Right controls
         key = pygame.key.get_pressed()
+        scroll = 0
 
         if key[pygame.K_a]:
             self.flip = False
@@ -92,7 +95,7 @@ class Player():
 
         self.vel_y += GRAVITY
         self.dy += self.vel_y
-        self.rect.y += self.dy
+        self.rect.y += self.dy + scroll
 
         # side switch
         if self.rect.x < 0:
@@ -101,9 +104,9 @@ class Player():
             self.rect.x = 0
         
         # temp bottom screen collision
-        if self.rect.bottom + self.dy > SCREEN_HEIGT:
-            self.JumpUp()
-        
+        if brainman.rect.top > SCREEN_HEIGT + 50:
+            os.system('python deathscreen.py')
+            
         # platform collision
         for platform in platform_group:
             # checks if player is colliding with the platforms
@@ -117,14 +120,18 @@ class Player():
                         self.dy = 0
                         self.JumpUp()
 
+        if self.rect.top <= SCROLL:
+            if self.vel_y < 0:
+                scroll = -self.dy
 
+        return scroll
 
 
 # platform group
 platform_group = pygame.sprite.Group()
 
 # start platform
-start_platform = Platform(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGT - 20, 100, False)
+start_platform = Platform(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGT - 20, 100)
 platform_group.add(start_platform)
 
 # temp platforms
@@ -132,39 +139,39 @@ for p in range(MAX_PLATFORMS):
     p_w = random.randint(70, 80)
     p_x = random.randint(0, SCREEN_WIDTH - p_w)
     p_y = p * 100
-    p_type = random.randint(1, 2)
-    if p_type == 1:
-        p_moving = True
-    else: 
-        p_moving =  False
-    platform = Platform(p_x, p_y, p_w, p_moving)  
+    platform = Platform(p_x, p_y, p_w)
     platform_group.add(platform)
 
 
 # game loop
 run = True
 brainman = Player(SCREEN_WIDTH // 2, SCREEN_HEIGT - 50)
+system('taskkill /F /FI "WINDOWTITLE eq BrainJump Menu" ')
 while run:
-
     #set framerate
     clock.tick(FPS)
 
-    
+    scroll = brainman.MoveCheck()
 
     # drawing
-    screen.blit(background_image, (0, 0))
+    background_scroll += scroll
+    if background_scroll >= background_image.get_height():
+        background_scroll = 0
+    scrollingbackground(background_scroll)
+
 
     platform_group.draw(screen)
 
     brainman.draw()
 
     #movement set
-    brainman.MoveCheck()
+    platform_group.update(scroll)
 
     # events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        
     
     pygame.display.update()
 pygame.quit()
