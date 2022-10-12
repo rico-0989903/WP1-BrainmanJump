@@ -66,7 +66,6 @@ class Player():
         self.dy = 0
         self.vel_y = -JUMP_STRENGTH
 
-
     def MoveCheck(self):
         #Left and Right controls
         key = pygame.key.get_pressed()
@@ -92,8 +91,6 @@ class Player():
         if brainman.rect.top > SCREEN_HEIGT + 50:
             os.system('python deathscreen.py')
             
-            
-        
         # platform collision
         for platform in platform_group:
             # checks if player is colliding with the platforms
@@ -106,9 +103,6 @@ class Player():
                         self.rect.bottom = platform.rect.top
                         self.dy = 0
                         self.JumpUp()
-
-
-
 
 # platform group
 platform_group = pygame.sprite.Group()
