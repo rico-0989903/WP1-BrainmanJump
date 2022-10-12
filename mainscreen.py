@@ -14,22 +14,26 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
 pygame.display.set_caption('BrainJump')
 
 # Images in map
-start_img = pygame.image.load('image/start.png').convert_alpha()
-exit_img = pygame.image.load('image/exit.png').convert_alpha()
-credits_img = pygame.image.load('image/credits.png').convert_alpha()
+start_img = pygame.image.load('images/start.png').convert_alpha()
+exit_img = pygame.image.load('images/exit.png').convert_alpha()
+credits_img = pygame.image.load('images/credits.png').convert_alpha()
 
 #button class
 class Button():
-    def _init_(self,x,y, image, scale):
+    def __init__(self, x, y, image, scale):
         #images Height and width info
-        width = image.get_width()
-        height = image.get_width()
-
+        #self.image = image
+        self.scale = (200, 100)
+        self.image = pygame.transform.scale(image, self.scale)
+        
+        width = self.image.get_width()
+        height = self.image.get_width()
+        
         # Image size
-        #self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale))
+        #s
 
        # Images rectangle 
-        self.image = image
+        
         self.rect = self.image.get_rect()
         self.rect.topleft = (x,y)
         self.clicked = False
@@ -57,8 +61,8 @@ class Button():
 
         return action
 
-start_button = Button(100, 200, start_image, #OG * size)
-exit_button = Button(450, 200, exit_img, #OG * size)
+start_button = Button(SCREEN_WIDTH// 2 - 100, 100, start_img, (200, 100))
+exit_button = Button(SCREEN_WIDTH// 2 - 100, 450, exit_img, (200, 100))
 
 
 
@@ -67,8 +71,11 @@ while run:
 
     screen.fill((0,0,0))
 
-    if start_button.draw() == True:
+    start_button.draw()
+    exit_button.draw()
 
+    if start_button.draw() == True:
+        pass
     if exit_button.draw() == True:
         run = False
 
