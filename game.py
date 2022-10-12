@@ -17,6 +17,7 @@ SCROLL = 200
 GRAVITY = 0.25
 JUMP_STRENGTH = 2.5
 scrolled_dist = 0
+background_scroll = 0
 
 # screen setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
@@ -30,6 +31,13 @@ brainman_sprite = pygame.image.load('Assets/BrainMan.png').convert_alpha()
 # Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+
+#Game functions
+def scrollingbackground(background_scroll):
+    screen.blit(background_image, (0, 0 + background_scroll))
+    screen.blit(background_image, (0, -background_image.get_height() + background_scroll))
+
+
 
 # classes
 class Platform(pygame.sprite.Sprite):
@@ -86,7 +94,7 @@ class Player():
 
         self.vel_y += GRAVITY
         self.dy += self.vel_y
-        self.rect.y += self.dy
+        self.rect.y += self.dy + scroll
 
         # side switch
         if self.rect.x < 0:
@@ -138,14 +146,16 @@ for p in range(MAX_PLATFORMS):
 run = True
 brainman = Player(SCREEN_WIDTH // 2, SCREEN_HEIGT - 50)
 while run:
-
     #set framerate
     clock.tick(FPS)
 
-    
+    scroll = brainman.MoveCheck()
 
     # drawing
-    screen.blit(background_image, (0, 0))
+    background_scroll += scroll
+    if background_scroll >= background_image.get_height():
+        background_scroll = 0
+    scrollingbackground(background_scroll)
 
 
     platform_group.draw(screen)
@@ -153,7 +163,6 @@ while run:
     brainman.draw()
 
     #movement set
-    scroll = brainman.MoveCheck()
     platform_group.update(scroll)
 
     # events
