@@ -21,6 +21,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
 pygame.display.set_caption('BrainJump')
 
 # images
+background_image = pygame.image.load('Assets/BG.png').convert_alpha()
 platform_image = pygame.image.load('Assets/Platforms.png').convert_alpha()
 brainman_sprite = pygame.image.load('Assets/BrainMan.png').convert_alpha()
 
@@ -129,10 +130,10 @@ while run:
     #set framerate
     clock.tick(FPS)
 
-    #set background color
-    screen.fill((WHITE))
+    
 
     # drawing
+    screen.blit(background_image, (0, 0))
 
     platform_group.draw(screen)
 
