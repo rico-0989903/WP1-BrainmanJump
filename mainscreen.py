@@ -1,4 +1,5 @@
 import pygame
+import os 
 
 pygame.init()
 
@@ -85,7 +86,8 @@ while run:
             run = False
 
         if start_button.draw() == True:
-            pass
+            os.system('python game.py')
+            run = False
         if exit_button.draw() == True:
             run = False
 
