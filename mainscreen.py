@@ -47,13 +47,14 @@ class Button():
         #print(pos)
 
         #Mouse click Leftbutton:[0]
+        mouse_buttons = pygame.mouse.get_pressed()
+
         if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+            if mouse_buttons[0] and self.clicked == False:
+                print("clicked")
                 self.clicked = True
                 action = True
         
-        if pygame.mouse.get_pressed()[0] == 0:
-            self.clicked = False
 
 
         #draw buttons on screen
@@ -74,16 +75,20 @@ while run:
     start_button.draw()
     exit_button.draw()
 
-    if start_button.draw() == True:
-        pass
-    if exit_button.draw() == True:
-        run = False
+
+    
 
 
     for event in pygame.event.get():
+        
         if event.type == pygame.QUIT:
             run = False
-        
+
+        if start_button.draw() == True:
+            pass
+        if exit_button.draw() == True:
+            run = False
+
     pygame.display.update()
 
 pygame.quit()
