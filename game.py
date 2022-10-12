@@ -1,6 +1,8 @@
 from cmath import rect
 import pygame
 import random
+import os
+from os import system
 
 pygame.init()
 
@@ -87,8 +89,10 @@ class Player():
             self.rect.x = 0
         
         # temp bottom screen collision
-        if self.rect.bottom + self.dy > SCREEN_HEIGT:
-            self.JumpUp()
+        if brainman.rect.top > SCREEN_HEIGT + 50:
+            os.system('python deathscreen.py')
+            
+            
         
         # platform collision
         for platform in platform_group:
@@ -125,6 +129,7 @@ for p in range(MAX_PLATFORMS):
 # game loop
 run = True
 brainman = Player(SCREEN_WIDTH // 2, SCREEN_HEIGT - 50)
+system('taskkill /F /FI "WINDOWTITLE eq BrainJump Menu" ')
 while run:
 
     #set framerate
@@ -146,6 +151,7 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        
     
     pygame.display.update()
 pygame.quit()

@@ -1,5 +1,6 @@
 import pygame
 import os 
+from os import system
 
 pygame.init()
 
@@ -12,7 +13,7 @@ MAX_PLATFORMS = 10
 
 # screen setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
-pygame.display.set_caption('BrainJump')
+pygame.display.set_caption('BrainJump Menu')
 
 # Images in map
 start_img = pygame.image.load('images/start.png').convert_alpha()
@@ -69,6 +70,7 @@ exit_button = Button(SCREEN_WIDTH// 2 - 100, 450, exit_img, (200, 100))
 
 
 run = True 
+system('taskkill /F /FI "WINDOWTITLE eq BrainJump" ')
 while run:
 
     screen.fill((0,0,0))
@@ -88,6 +90,7 @@ while run:
         if start_button.draw() == True:
             os.system('python game.py')
             run = False
+
         if exit_button.draw() == True:
             run = False
 
