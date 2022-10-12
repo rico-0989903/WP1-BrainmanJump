@@ -1,4 +1,5 @@
 from cmath import rect
+from tkinter import scrolledtext
 import pygame
 import random
 
@@ -21,6 +22,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
 pygame.display.set_caption('BrainJump')
 
 # images
+background_image = pygame.image.load('Assets/BG.png').convert_alpha()
 platform_image = pygame.image.load('Assets/Platforms.png').convert_alpha()
 brainman_sprite = pygame.image.load('Assets/BrainMan.png').convert_alpha()
 
@@ -30,12 +32,25 @@ BLACK = (0, 0, 0)
 
 # classes
 class Platform(pygame.sprite.Sprite):
-    def __init__(self, x, y, width):
+    def __init__(self, x, y, width, moving):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.transform.scale(platform_image, (width, 10))
         self.rect = self.image.get_rect()
+        self.moving = moving 
+        self.move_counter = random.randint(70, 80)
+        self.direction = random.choice([-2, 2])
         self.rect.x = x
         self.rect.y = y
+
+def update(self,scroll):
+    if self.moving == True:
+        self.rect.x += self.direction 
+        
+    self.rect.y += scroll
+
+    if self.rect.top > SCREEN_HEIGT:
+        self.kill()
+
 
 class Player():
     def __init__(self, x, y):
@@ -109,7 +124,7 @@ class Player():
 platform_group = pygame.sprite.Group()
 
 # start platform
-start_platform = Platform(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGT - 20, 100)
+start_platform = Platform(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGT - 20, 100, False)
 platform_group.add(start_platform)
 
 # temp platforms
@@ -117,7 +132,12 @@ for p in range(MAX_PLATFORMS):
     p_w = random.randint(70, 80)
     p_x = random.randint(0, SCREEN_WIDTH - p_w)
     p_y = p * 100
-    platform = Platform(p_x, p_y, p_w)
+    p_type = random.randint(1, 2)
+    if p_type == 1:
+        p_moving = True
+    else: 
+        p_moving =  False
+    platform = Platform(p_x, p_y, p_w, p_moving)  
     platform_group.add(platform)
 
 
@@ -129,10 +149,10 @@ while run:
     #set framerate
     clock.tick(FPS)
 
-    #set background color
-    screen.fill((WHITE))
+    
 
     # drawing
+    screen.blit(background_image, (0, 0))
 
     platform_group.draw(screen)
 
