@@ -1,6 +1,6 @@
+import os
+
 import pygame
-import os 
-from os import system
 
 pygame.init()
 pygame.font.init()
@@ -96,7 +96,7 @@ highscoretext = scorefont.render(f'Highscore = {highscore}', False, (255, 255, 2
 print(score)
 
 run = True 
-system('taskkill /F /FI "WINDOWTITLE eq BrainJump" ')
+os.system('taskkill /F /FI "WINDOWTITLE eq BrainJump" ')
 while run:
 
     screen.fill((0,0,0))

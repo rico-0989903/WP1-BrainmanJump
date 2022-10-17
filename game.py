@@ -1,9 +1,7 @@
-from cmath import rect
-import pygame
-import random
 import os
-from os import system
+import random
 
+import pygame
 
 pygame.init()
 
@@ -149,7 +147,7 @@ font = pygame.font.SysFont('Comic Sans', 50)
 # game loop
 run = True
 brainman = Player(SCREEN_WIDTH // 2, SCREEN_HEIGT - 50)
-system('taskkill /F /FI "WINDOWTITLE eq BrainJump Menu" ')
+os.system('taskkill /F /FI "WINDOWTITLE eq BrainJump Menu" ')
 while run:
     #set framerate
     clock.tick(FPS)
