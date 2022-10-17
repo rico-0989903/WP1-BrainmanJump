@@ -4,6 +4,7 @@ import random
 import os
 from os import system
 
+
 pygame.init()
 
 # variables
@@ -105,6 +106,8 @@ class Player():
         
         # temp bottom screen collision
         if brainman.rect.top > SCREEN_HEIGT + 50:
+            with open("scores.txt", 'w') as scorefile:
+                scorefile.write(str(int(score)))
             os.system('python deathscreen.py')
             
         # platform collision
@@ -138,6 +141,10 @@ platform_group = pygame.sprite.Group()
 platform = Platform(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGT - 30, 100)
 platform_group.add(platform)
 
+# score
+score = 0
+font = pygame.font.SysFont('Comic Sans', 50)
+#text = font.render(f'Score: {score}', False, (255, 255, 255))
 
 # game loop
 run = True
@@ -147,13 +154,18 @@ while run:
     #set framerate
     clock.tick(FPS)
 
+    #checks player movement
     scroll = brainman.MoveCheck()
-
+  
     # drawing
     background_scroll += scroll
     if background_scroll >= background_image.get_height():
         background_scroll = 0
     scrollingbackground(background_scroll)
+
+    #score text
+    text = font.render(f'Score: {int(score)}', False, (255, 255, 255))
+    screen.blit(text, (10,0))
 
     #Platform generating
     if len(platform_group) < MAX_PLATFORMS:
@@ -169,7 +181,7 @@ while run:
 
     platform_group.draw(screen)
     brainman.draw()
-
+    score = score + scroll
     # events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

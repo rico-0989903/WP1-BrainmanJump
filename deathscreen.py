@@ -10,7 +10,8 @@ SCREEN_WIDTH = 500
 SCREEN_HEIGT = 800
 clock = pygame.time.Clock()
 MAX_PLATFORMS = 10
-
+score = 0
+highscore = 0
 # screen setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
 pygame.display.set_caption('BrainJump Menu')
@@ -64,12 +65,35 @@ class Button():
 
         return action
 
-start_button = Button(SCREEN_WIDTH// 2 - 100, 300, start_img, (200, 100))
-exit_button = Button(SCREEN_WIDTH// 2 - 100, 450, exit_img, (200, 100))
+start_button = Button(SCREEN_WIDTH// 2 - 100, 400, start_img, (200, 100))
+exit_button = Button(SCREEN_WIDTH// 2 - 100, 550, exit_img, (200, 100))
 
-font = pygame.font.SysFont('Comic Sans', 80)
+scorefile = open("scores.txt", 'r')
+strscore = scorefile.read()
+score = int(strscore)
 
+highscorefile = open("highscore.txt", 'r')
+strhighscore = highscorefile.read()
+print(strhighscore)
+highscore = int(strhighscore)
+highscorefile.close()
+
+
+if score > highscore:
+    highscore = score
+    print(highscore)
+    highscorefile = open("highscore.txt", 'w')
+    highscorefile.write(str(highscore))
+    highscorefile.close()
+
+font = pygame.font.SysFont('Comic Sans', 80)  
+scorefont = pygame.font.SysFont('Comic Sans', 50)  
 text = font.render('Game Over', False, (255, 255, 255))
+scoretext = scorefont.render(f'Score = {score}', False, (255, 255, 255))
+highscoretext = scorefont.render(f'Highscore = {highscore}', False, (255, 255, 255))
+
+
+print(score)
 
 run = True 
 system('taskkill /F /FI "WINDOWTITLE eq BrainJump" ')
@@ -77,6 +101,8 @@ while run:
 
     screen.fill((0,0,0))
     screen.blit(text, (40, 10))
+    screen.blit(scoretext, (40, 100))
+    screen.blit(highscoretext, (40, 200))
     start_button.draw()
     exit_button.draw()
 
