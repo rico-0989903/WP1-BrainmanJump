@@ -1,6 +1,6 @@
+import os
+
 import pygame
-import os 
-from os import system
 
 pygame.init()
 pygame.font.init()
@@ -61,7 +61,7 @@ text = font.render('Main Menu', False, (255, 255, 255))
 
 
 run = True 
-system('taskkill /F /FI "WINDOWTITLE eq BrainJump" ')
+os.system('taskkill /F /FI "WINDOWTITLE eq BrainJump" ')
 while run:
 
     screen.fill((0,0,0))
