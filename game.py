@@ -68,9 +68,11 @@ class Buttondeath():
 
         if self.rect.collidepoint(pos):
             if mouse_buttons[0] and self.clicked == False:
-                print("clicked")
                 self.clicked = True
                 action = True
+
+      
+            
         #draw buttons on screen
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
@@ -102,23 +104,23 @@ class Button():
         mouse_buttons = pygame.mouse.get_pressed()
 
         if self.rect.collidepoint(pos):
-            pygame.transform.scale(self.image, (210, 110))
+            
             if mouse_buttons[0] and self.clicked == False:
-                print("clicked")
                 self.clicked = True
                 action = True
         #draw buttons on screen
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
         return action
+   
 
 #buttons
 start_button = Button(SCREEN_WIDTH// 2 - 100, 300, start_img, (200, 100))
 exit_button = Button(SCREEN_WIDTH// 2 - 100, 450, exit_img, (200, 100))
 
 #main menu text
-menufont = pygame.font.SysFont('Comic Sans', 80)
-text = menufont.render('Main Menu', False, (30, 0, 0))
+menufont = pygame.font.SysFont('Eras Bold ETC', 110)
+text = menufont.render('Main Menu', False, (0, 0, 0))
 
 
 
@@ -245,6 +247,8 @@ class Player():
         self.dy += self.vel_y
         self.rect.y += self.dy + scroll
 
+        self.mask = pygame.mask.from_surface(self.image)
+
         return scroll
 
 
@@ -253,7 +257,7 @@ platform_group = pygame.sprite.Group()
 enemy_group = pygame.sprite.Group()
 
 # start platform
-platform = Platform(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGT - 30, 100)
+platform = Platform(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGT - 20, 100)
 platform_group.add(platform)
 
 # score
@@ -262,26 +266,22 @@ font = pygame.font.SysFont('Comic Sans', 50)
 
 
 #MAIN MENU DRAW
-screen.fill((255,210,210))
-screen.blit(text, (50, 10))
-start_button.draw()
-exit_button.draw()
+
 
 
 #GAME OVER MENU
 
 highscorefile = open("highscore.txt", 'r')
 strhighscore = highscorefile.read()
-print(strhighscore)
 highscore = int(strhighscore)
 highscorefile.close()
 
 
 
 
-deathfont = pygame.font.SysFont('Comic Sans', 80)  
-scorefont = pygame.font.SysFont('Comic Sans', 50)  
-deathtext = deathfont.render('Game Over', False, (255, 255, 255))
+deathfont = pygame.font.SysFont('Eras Bold ETC', 110)  
+scorefont = pygame.font.SysFont('Eras Demi ETC', 60)  
+deathtext = deathfont.render('Game Over', False, (0, 0, 0))
 
 PLAYER_MADE = False
 # game loop
@@ -291,11 +291,19 @@ brainman = Player(SCREEN_WIDTH // 2, SCREEN_HEIGT - 50)
 
 while run:
     clock.tick(FPS)
-    
-#GAME ITSELF
+    if MAIN_MENU == True:
+        screen.fill((255,210,210))
+        screen.blit(text, (50, 50))
+        pos = pygame.mouse.get_pos()
+        if start_button.rect.collidepoint(pos):  
+            pygame.draw.rect(screen, (50, 50, 50), pygame.Rect(SCREEN_WIDTH// 2 - 95, 305, 210, 110))
+        start_button.draw()
+        if exit_button.rect.collidepoint(pos):  
+            pygame.draw.rect(screen, (50, 50, 50), pygame.Rect(SCREEN_WIDTH// 2 - 95, 455, 210, 110))
+        exit_button.draw()
+        #GAME ITSELF
     if MAIN_MENU == False and GAME_OVER == False:
         #checks player movement
-        
         scroll = brainman.MoveCheck()
     
         # drawing
@@ -329,11 +337,15 @@ while run:
         if brainman.rect.top > SCREEN_HEIGT + 50:
             pygame.mixer.Sound.play(death_sound)
             GAME_OVER = True
-        for enemy in enemy_group:
-            if enemy.rect.colliderect(brainman.rect.x, brainman.rect.y, 35, 35):
-                pygame.time.wait(500)
-                pygame.mixer.Sound.play(death_sound)
-                GAME_OVER = True
+
+        if pygame.sprite.spritecollide(brainman, enemy_group, False): 
+            if pygame.sprite.spritecollide(brainman, enemy_group, False, pygame.sprite.collide_mask):
+            #for enemy in enemy_group:
+            #   if enemy.rect.colliderect(brainman.rect.x, brainman.rect.y, 35, 35):
+                    pygame.time.wait(500)
+                    pygame.mixer.Sound.play(death_sound)
+                    GAME_OVER = True
+
         if score > 2000:
             enemy_group.update(scroll)
             enemy_group.draw(screen)
@@ -341,7 +353,8 @@ while run:
 
     #GAME OVER MENU
     if GAME_OVER == True:
-
+        
+        enemy_group.empty()
         if score > highscore:
             highscore = int(score)
             print(highscore)
@@ -352,10 +365,15 @@ while run:
         scoretext = scorefont.render(f'Score = {int(score)}', False, (0, 0, 0))
         highscoretext = scorefont.render(f'Highscore = {highscore}', False, (0, 0, 0))
         screen.fill((255,210,210))
-        screen.blit(deathtext, (40, 10))
-        screen.blit(scoretext, (40, 150))
-        screen.blit(highscoretext, (40, 250))
+        screen.blit(deathtext, (40, 40))
+        screen.blit(scoretext, (40, 180))
+        screen.blit(highscoretext, (40, 280))
+        pos = pygame.mouse.get_pos()
+        if deathstart_button.rect.collidepoint(pos):  
+            pygame.draw.rect(screen, (50, 50, 50), pygame.Rect(SCREEN_WIDTH// 2 - 95, 405, 210, 110))
         deathstart_button.draw()
+        if deathexit_button.rect.collidepoint(pos):  
+            pygame.draw.rect(screen, (50, 50, 50), pygame.Rect(SCREEN_WIDTH// 2 - 95, 555, 210, 110))
         deathexit_button.draw()
 
     # events
@@ -373,18 +391,17 @@ while run:
             if deathstart_button.draw() == True:
                 highscorefile = open("highscore.txt", 'r')
                 strhighscore = highscorefile.read()
-                print(strhighscore)
                 highscore = int(strhighscore)
                 highscorefile.close()
                 score = 0
                 scroll = 0
-                brainman.rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGT - 150)
+                brainman.dy = -20
                 platform_group.empty()
-                platform = Platform(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGT - 30, 100)
+                platform = Platform(SCREEN_WIDTH // 2 - 50, SCREEN_HEIGT - 20, 100)
                 platform_group.add(platform)
-            
+                brainman.rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGT - 120)
                 GAME_OVER = False
-                pygame.time.wait(500)
+                
             if deathexit_button.draw() == True:
                 run = False
         
