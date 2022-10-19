@@ -4,6 +4,7 @@ import random
 import pygame
 
 pygame.init()
+pygame.mixer.init()
 
 # variables
 FPS = 60
@@ -24,6 +25,9 @@ JUMP_STRENGTH = 2.4
 scrolled_dist = 0
 background_scroll = 0
 
+#Sound variables
+jump_sound = pygame.mixer.Sound("sounds/jump.wav")
+death_sound = pygame.mixer.Sound("sounds/death.mp3")
 
 # screen setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
@@ -198,6 +202,7 @@ class Player():
 
     # Jumping
     def JumpUp(self):
+        pygame.mixer.Sound.play(jump_sound)
         self.dy = 0
         self.vel_y = -JUMP_STRENGTH
 
@@ -218,10 +223,6 @@ class Player():
             self.rect.x = SCREEN_WIDTH
         if self.rect.x > SCREEN_WIDTH:
             self.rect.x = 0
-        
-        # temp bottom screen collision
-        
-     
             
         # platform collision
         for platform in platform_group:
@@ -334,13 +335,17 @@ while run:
         
         score = score + scroll
         if brainman.rect.top > SCREEN_HEIGT + 50:
+            pygame.mixer.Sound.play(death_sound)
             GAME_OVER = True
+
         if pygame.sprite.spritecollide(brainman, enemy_group, False): 
             if pygame.sprite.spritecollide(brainman, enemy_group, False, pygame.sprite.collide_mask):
             #for enemy in enemy_group:
             #   if enemy.rect.colliderect(brainman.rect.x, brainman.rect.y, 35, 35):
                     pygame.time.wait(500)
+                    pygame.mixer.Sound.play(death_sound)
                     GAME_OVER = True
+
         if score > 2000:
             enemy_group.update(scroll)
             enemy_group.draw(screen)
