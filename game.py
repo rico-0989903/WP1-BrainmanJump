@@ -27,7 +27,7 @@ background_scroll = 0
 
 #Sound variables
 jump_sound = pygame.mixer.Sound("sounds/jump.wav")
-death_sound = pygame.mixer.Sound("sounds/death.mp3")
+death_sound = pygame.mixer.music.load("sounds/death.mp3")
 
 # screen setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGT))
@@ -335,7 +335,7 @@ while run:
         
         score = score + scroll
         if brainman.rect.top > SCREEN_HEIGT + 50:
-            pygame.mixer.Sound.play(death_sound)
+            pygame.mixer.music.play(death_sound)
             GAME_OVER = True
 
         if pygame.sprite.spritecollide(brainman, enemy_group, False): 
@@ -343,7 +343,7 @@ while run:
             #for enemy in enemy_group:
             #   if enemy.rect.colliderect(brainman.rect.x, brainman.rect.y, 35, 35):
                     pygame.time.wait(500)
-                    pygame.mixer.Sound.play(death_sound)
+                    pygame.mixer.music.play(death_sound)
                     GAME_OVER = True
 
         if score > 2000:
