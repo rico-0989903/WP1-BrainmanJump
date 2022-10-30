@@ -6,6 +6,11 @@ import pygame
 pygame.init()
 pygame.mixer.init()
 
+#Background music
+pygame.mixer.music.load('sounds/backgroundmusic.mp3')
+pygame.mixer.music.set_volume(0.4)
+pygame.mixer.music.play(-1, 0.0)
+
 # variables
 FPS = 60
 SCREEN_WIDTH = 500
@@ -236,7 +241,7 @@ class Player():
                         self.rect.bottom = platform.rect.top
                         self.dy = 0
                         self.JumpUp()
-        
+
         
 
         if self.rect.top <= SCROLL:
