@@ -3,6 +3,7 @@ import random
 
 import pygame
 
+#iets
 pygame.init()
 pygame.mixer.init()
 
